@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AlWaleemah.Models
 {
@@ -15,5 +16,10 @@ namespace AlWaleemah.Models
         public int Qty { get; set; }
 
         public string? Description { get; set; }
+
+
+        [NotMapped]
+        public IFormFile? ImageFile { get; set; }
+        public string? ImageUrl { get; set; }
     }
 }

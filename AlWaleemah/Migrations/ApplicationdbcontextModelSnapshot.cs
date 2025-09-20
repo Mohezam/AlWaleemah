@@ -22,6 +22,52 @@ namespace AlWaleemah.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("AlWaleemah.Models.Cat2", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("price")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categorie2");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Electronic gadgets and devices",
+                            Name = "Electronics",
+                            price = 50
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Apparel and accessories",
+                            Name = "Clothing",
+                            price = 30
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Fiction and non-fiction books",
+                            Name = "Books",
+                            price = 20
+                        });
+                });
+
             modelBuilder.Entity("AlWaleemah.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -107,6 +153,9 @@ namespace AlWaleemah.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")

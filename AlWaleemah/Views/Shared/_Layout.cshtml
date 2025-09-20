@@ -1,6 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 
+@* <html lang="ar"> *@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -66,8 +67,12 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="buttons.html">Buttons</a>
-                        <a class="collapse-item" href="cards.html">Cards</a>
+                        <a class="collapse-item" href="/Categories">Categories</a>
+                        <a class="collapse-item" href="/Products">Products</a>
+
+                        @* <a class="nav-link" asp-controller="Categories" asp-action="Index">Categories</a> *@
+                       @*  <a class="collapse-item" href="buttons.html">Buttons</a>
+                        <a class="collapse-item" href="cards.html">Cards</a> *@
                     </div>
                 </div>
             </li>
@@ -410,6 +415,8 @@
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+        
+
 
         @await RenderSectionAsync("Scripts", required: false)
     </div>

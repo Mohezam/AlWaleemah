@@ -13,10 +13,13 @@ namespace AlWaleemah.Controllers
     public class ProductsController : Controller
     {
         private readonly Applicationdbcontext _context;
+        private readonly IWebHostEnvironment _env;
 
-        public ProductsController(Applicationdbcontext context)
+
+        public ProductsController(Applicationdbcontext context, IWebHostEnvironment env)
         {
             _context = context;
+            _env = env;
         }
 
         // GET: Products
@@ -52,17 +55,104 @@ namespace AlWaleemah.Controllers
         // POST: Products/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([Bind("Id,ProductName,Price,Category,Qty,Description")] Product product)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.Add(product);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(product);
+        //}
+
+
+        private string? SaveImage(IFormFile? file)
+        {
+            if (file == null || file.Length == 0) return null;
+
+            // التحقق من الامتداد (اختياري لكنه مهم)
+            var allowed = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+            var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+            if (!allowed.Contains(ext))
+                throw new InvalidOperationException("امتداد الملف غير مسموح");
+
+            // مسار المجلد داخل wwwroot
+            var folder = Path.Combine("uploads", "products");
+            var rootFolder = Path.Combine(_env.WebRootPath, folder);
+
+            // إنشاء المجلد لو غير موجود
+            Directory.CreateDirectory(rootFolder);
+
+            // اسم ملف فريد
+            var fileName = $"{Guid.NewGuid():N}{ext}";
+            var fullPath = Path.Combine(rootFolder, fileName);
+
+            using (var stream = System.IO.File.Create(fullPath))
+            {
+                file.CopyTo(stream);
+            }
+
+            // نعيد المسار النسبي للاستخدام في <img src="~/{path}">
+            var relativePath = Path.Combine(folder, fileName).Replace('\\', '/');
+            return "/" + relativePath;
+        }
+
+
+
+        private void DeleteImageIfExists(string? relativePath)
+        {
+            if (string.IsNullOrWhiteSpace(relativePath)) return;
+
+            var fullPath = Path.Combine(_env.WebRootPath, relativePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+            if (System.IO.File.Exists(fullPath))
+            {
+                System.IO.File.Delete(fullPath);
+            }
+        }
+
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ProductName,Price,Category,Qty,Description")] Product product)
+        public IActionResult Create(Product ptoducts)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                //_context.Products.Add(ptoducts);
+                //_context.SaveChanges();
+
+
+                if (ptoducts.ImageFile != null)
+                {
+
+
+
+
+                    // حفظ الصورة في المجلد وإرجاع المسار النسبي
+                    var imagePath = SaveImage(ptoducts.ImageFile);
+                    ptoducts.ImageUrl = imagePath;
+
+
+                }
+
+                //_unitOfWork.Products.Add(ptoducts);
+                //_unitOfWork.Save();
+                _context.Products.Add(ptoducts);
+                _context.SaveChanges();
+
+                TempData["Add"] = "تم اضافة البيانات بنجاح";
+                return RedirectToAction("Index");
+
             }
-            return View(product);
+
+            else
+            {
+                return View(ptoducts);
+            }
+
+
         }
 
         // GET: Products/Edit/5

@@ -1,59 +1,53 @@
 ﻿@model IEnumerable<AlWaleemah.Models.Product>
-
 @{
     ViewData["Title"] = "Index";
+    // layout="~/Views/Shared/_Layout2.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Product List</h1>
+<div class="text-end">
+    <a asp-action="Create" class="btn btn-primary mb-3">Create New</a>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<table class="table table-striped mb-3">
+
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Qty)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th></th>
+            <th>#</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Qty</th>
+            <th>Category</th>
+            <th>Image</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Qty)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>@category.Id</td>
+                <td>@category.ProductName</td>
+                <td>@category.Description</td>
+                <td>@category.Price</td>
+                <td>@category.Qty</td>
+                @* <td>@category.Category?</td> *@
+                <td>
+                    <img src="@category.ImageUrl" width="200" height="150" />
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@category.Id" class="btn btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@category.Id" class="btn btn-danger">Delete</a>
+            </tr>
+
+        }
+
+
+
     </tbody>
+
+
 </table>
+

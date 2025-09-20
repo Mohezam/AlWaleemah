@@ -1,9 +1,18 @@
-using AlWaleemah.Data;
+﻿using AlWaleemah.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllersWithViews();
+
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout
+    options.Cookie.HttpOnly = true; // Make the session cookie HTTP only
+    options.Cookie.IsEssential = true; // Make the session cookie essential
+});
+
 
 // Register the DbContext with the connection string
 builder.Services.AddDbContext<Applicationdbcontext>(options =>
@@ -17,6 +26,7 @@ var app = builder.Build();
 
 
 
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -25,11 +35,13 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.MapControllers(); // مهم للـ API attribute routing
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthorization();
 
 app.MapControllerRoute(
