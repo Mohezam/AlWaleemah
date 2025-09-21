@@ -7,6 +7,8 @@ namespace AlWaleemah.Models
     {
         [Key]
         public int Id { get; set; }
+        public string uid { get; set; } = Guid.NewGuid().ToString();
+        //property
 
         public string ProductName { get; set; }
         public decimal Price { get; set; }

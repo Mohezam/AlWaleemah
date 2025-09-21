@@ -7,6 +7,9 @@ namespace AlWaleemah.Models
         //property
         [Key]
         public int Id { get; set; }
+
+        public string uid { get; set; } = Guid.NewGuid().ToString();
+
         //property
         [Range(10, 100)]
         public int? price { get; set; }

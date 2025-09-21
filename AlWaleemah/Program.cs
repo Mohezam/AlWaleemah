@@ -1,9 +1,15 @@
 ﻿using AlWaleemah.Data;
+using AlWaleemah.Repository;
+using AlWaleemah.Repository.Base;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddScoped<IRepoProduct, RepoProduct>();
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+// Get the connection string from appsettings.json
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddSession(options =>
@@ -14,9 +20,14 @@ builder.Services.AddSession(options =>
 });
 
 
-// Register the DbContext with the connection string
+//// Register the DbContext with the connection string
 builder.Services.AddDbContext<Applicationdbcontext>(options =>
     options.UseSqlServer(connectionString));
+
+//builder.Services.AddDbContext<Applicationdbcontext>(options =>
+//options.UseLazyLoadingProxies().
+//    UseSqlServer(conectionString));
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -40,12 +51,14 @@ app.MapControllers(); // مهم للـ API attribute routing
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+
+
 app.UseRouting();
 app.UseSession();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Account}/{action=Login}/{id?}");
 
 app.Run();

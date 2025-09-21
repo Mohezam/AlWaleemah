@@ -1,5 +1,6 @@
 ﻿using AlWaleemah.Data;
 using AlWaleemah.Models;
+using AlWaleemah.Repository.Base;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,23 +9,25 @@ namespace AlWaleemah.Controllers
     public class CategoriesController : Controller
     {
         private readonly Applicationdbcontext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CategoriesController(Applicationdbcontext context)
+        public CategoriesController(Applicationdbcontext context,IUnitOfWork unitOfWork)
         {
             _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<Category>> GetAll()
         {
-            var categories = _context.Categories.ToList();
+            var categories = _unitOfWork.Categories.FindAll();
             return Ok(categories);
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            IEnumerable<Category> category = _context.Categories.ToList();
+            IEnumerable<Category> category = _unitOfWork.Categories.FindAll();
             return View(category);
         }
 
