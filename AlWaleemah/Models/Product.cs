@@ -7,21 +7,26 @@ namespace AlWaleemah.Models
     {
         [Key]
         public int Id { get; set; }
-        public string uid { get; set; } = Guid.NewGuid().ToString();
-        //property
+
+        public string Uid { get; set; } = Guid.NewGuid().ToString();
 
         public string ProductName { get; set; }
+
         public decimal Price { get; set; }
 
-        public string Category { get; set; }
+        // Foreign Key
+        public int CategoryId { get; set; }
 
-        public int Qty { get; set; }
+        // Navigation Property
+        public Category Category { get; set; }
+
+        public int Quantity { get; set; }
 
         public string? Description { get; set; }
 
-
         [NotMapped]
         public IFormFile? ImageFile { get; set; }
+
         public string? ImageUrl { get; set; }
     }
 }

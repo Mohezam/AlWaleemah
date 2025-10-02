@@ -14,7 +14,7 @@ namespace AlWaleemah.Repository
 
         public Category FindByUIdCategory(string uid)
         {
-            Category Category = _context.Categories.FirstOrDefault(c => c.uid == uid);
+            Category Category = _context.Categories.FirstOrDefault(c => c.Uid == uid);
             return Category;
 
         }

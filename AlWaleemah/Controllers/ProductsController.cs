@@ -57,7 +57,7 @@ namespace AlWaleemah.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         //[HttpPost]
         //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("Id,ProductName,Price,Category,Qty,Description")] Product product)
+        //public async Task<IActionResult> Create([Bind("Id,ProductName,Price,Categorys,Quantity,Description")] Product product)
         //{
         //    if (ModelState.IsValid)
         //    {
@@ -127,13 +127,9 @@ namespace AlWaleemah.Controllers
                 if (ptoducts.ImageFile != null)
                 {
 
-
-
-
                     // حفظ الصورة في المجلد وإرجاع المسار النسبي
                     var imagePath = SaveImage(ptoducts.ImageFile);
                     ptoducts.ImageUrl = imagePath;
-
 
                 }
 
@@ -176,7 +172,7 @@ namespace AlWaleemah.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ProductName,Price,Category,Qty,Description")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ProductName,Price,Categorys,Quantity,Description")] Product product)
         {
             if (id != product.Id)
             {

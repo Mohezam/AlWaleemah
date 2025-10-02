@@ -189,7 +189,7 @@ namespace AlWaleemah.Controllers
 //        }
 
 //        [HttpGet]
-//        public ActionResult<IEnumerable<Category>> GetAll()
+//        public ActionResult<IEnumerable<Categorys>> GetAll()
 //        {
 //            var categories = _context.Categories.ToList();
 
@@ -199,7 +199,7 @@ namespace AlWaleemah.Controllers
 //        [HttpGet]
 //        public IActionResult Index()
 //        {
-//            IEnumerable<Category> category = _context.Categories.ToList();
+//            IEnumerable<Categorys> category = _context.Categories.ToList();
 //            return View(category);
 //        }
 
@@ -212,7 +212,7 @@ namespace AlWaleemah.Controllers
 
 
 //        [HttpPost]
-//        public IActionResult Create(Category category)
+//        public IActionResult Create(Categorys category)
 //        {
 
 //            _context.Categories.Add(category);
@@ -234,7 +234,7 @@ namespace AlWaleemah.Controllers
 
 
 //        [HttpPost]
-//        public IActionResult Edit(Category category)
+//        public IActionResult Edit(Categorys category)
 //        {
 
 //            _context.Categories.Update(category);
@@ -254,7 +254,7 @@ namespace AlWaleemah.Controllers
 
 
 //        [HttpPost]
-//        public IActionResult Delete(Category category)
+//        public IActionResult Delete(Categorys category)
 //        {
 
 //            _context.Categories.Remove(category);

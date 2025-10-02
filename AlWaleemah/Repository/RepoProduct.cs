@@ -30,7 +30,7 @@ namespace AlWaleemah.Repository
 
         public Product FindByUIdproduct(string uid)
         {
-            Product product = _context.Products.FirstOrDefault(c => c.uid == uid);
+            Product product = _context.Products.FirstOrDefault(c => c.Uid == uid);
             return product;
 
         }

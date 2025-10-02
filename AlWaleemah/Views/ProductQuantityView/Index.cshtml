@@ -1,0 +1,164 @@
+﻿@model IEnumerable<AlWaleemah.Models.ProductQuantityView>
+@using AlWaleemah.Models
+
+@{
+    ViewData["Title"] = "Product Stock";
+}
+
+<h2>Product Stock </h2>
+
+<!-- فلتر الفئة -->
+<form method="get" asp-action="Index" style="margin-bottom: 10px;">
+    <label for="category">Filter by Category:</label>
+    <select id="category" name="categoryId" class="form-select" style="width: 200px; display: inline-block;">
+        <option value="">All Categories</option>
+        @foreach (var cat in ViewBag.Categories)
+        {
+            <option value="@cat.Id">@cat.Name</option>
+        }
+    </select>
+    <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+</form>
+
+<!-- بحث مباشر -->
+<label for="searchInput">Search:</label>
+<input type="text" id="searchInput" placeholder="Search Product or Category..." class="form-control" style="width: 300px; display: inline-block; margin-bottom: 10px;" />
+
+<!-- أزرار التصدير -->
+<div style="margin-bottom: 10px;">
+    <button class="btn btn-success btn-sm" onclick="exportToExcel()">Export to Excel</button>
+    <button class="btn btn-danger btn-sm" onclick="exportToPDF()">Export to PDF</button>
+</div>
+
+<!-- جدول البيانات -->
+<table id="stockTable" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th onclick="sortTable(1)">Product &#x25B2;&#x25BC;</th>
+            <th onclick="sortTable(2)">Category &#x25B2;&#x25BC;</th>
+            <th onclick="sortTable(3)">Quantity &#x25B2;&#x25BC;</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                    {
+                        <img src="@item.ImageUrl" alt="@item.ProductName" style="width:50px; height:50px;" />
+                    }
+                </td>
+                <td>@item.ProductName</td>
+                <td>@item.CategoryName</td>
+                <td>@item.Quantity</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- مكتبات التصدير -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+<script>
+    // ترتيب الجدول
+    function sortTable(columnIndex) {
+        var table = document.getElementById("stockTable");
+        if (!table || !table.tBodies.length) return;
+
+        var rows = Array.from(table.tBodies[0].rows);
+        var ascending = table.getAttribute("data-sort-dir") !== "asc";
+
+        rows.sort(function (a, b) {
+            var aText = a.cells[columnIndex].innerText;
+            var bText = b.cells[columnIndex].innerText;
+            if (columnIndex === 3) { // Quantity
+                return ascending ? aText - bText : bText - aText;
+            }
+            return ascending ? aText.localeCompare(bText) : bText.localeCompare(aText);
+        });
+
+        var tbody = table.tBodies[0];
+        tbody.innerHTML = "";
+        rows.forEach(r => tbody.appendChild(r));
+        table.setAttribute("data-sort-dir", ascending ? "asc" : "desc");
+    }
+
+    // البحث المباشر
+    document.getElementById("searchInput").addEventListener("keyup", function () {
+        var filter = this.value.toLowerCase();
+        var table = document.getElementById("stockTable");
+        if (!table || !table.tBodies.length) return;
+
+        var rows = table.tBodies[0].rows;
+        for (var i = 0; i < rows.length; i++) {
+            var product = rows[i].cells[1].innerText.toLowerCase();
+            var category = rows[i].cells[2].innerText.toLowerCase();
+            rows[i].style.display = (product.includes(filter) || category.includes(filter)) ? "" : "none";
+        }
+    });
+
+    // تصدير Excel مع حماية
+    function exportToExcel() {
+        var table = document.getElementById("stockTable");
+        if (!table || !table.tHead || !table.tHead.rows.length || !table.tBodies.length) {
+            alert("⚠️ Table is not ready!");
+            return;
+        }
+
+        var wb = XLSX.utils.book_new();
+        var ws_data = [];
+
+        // العناوين
+        var headers = [];
+        for (var i = 0; i < table.tHead.rows[0].cells.length; i++) {
+            headers.push(table.tHead.rows[0].cells[i].innerText);
+        }
+        ws_data.push(headers);
+
+        // الصفوف
+        for (var i = 0; i < table.tBodies[0].rows.length; i++) {
+            var tr = table.tBodies[0].rows[i];
+            if (tr.style.display === "none") continue;
+
+            var row = [];
+            for (var j = 0; j < tr.cells.length; j++) {
+                if (j === 0) { // Image
+                    var img = tr.cells[j].querySelector('img');
+                    row.push(img ? "[Image]" : "");
+                } else {
+                    row.push(tr.cells[j].innerText);
+                }
+            }
+            ws_data.push(row);
+        }
+
+        var ws = XLSX.utils.aoa_to_sheet(ws_data);
+        XLSX.utils.book_append_sheet(wb, ws, "Stock");
+        XLSX.writeFile(wb, "ProductStock.xlsx");
+    }
+
+    // تصدير PDF مع حماية
+    function exportToPDF() {
+        var table = document.getElementById("stockTable");
+        if (!table || !table.tHead || !table.tHead.rows.length || !table.tBodies.length) {
+            alert("⚠️ Table is not ready!");
+            return;
+        }
+
+        var { jsPDF } = window.jspdf;
+        var doc = new jsPDF();
+
+        doc.autoTable({
+            html: '#stockTable',
+            didDrawCell: function (data) {
+                // يمكن مستقبلاً إضافة الصور هنا
+            }
+        });
+
+        doc.save('ProductStock.pdf');
+    }
+</script>

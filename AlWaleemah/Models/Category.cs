@@ -8,18 +8,18 @@ namespace AlWaleemah.Models
         [Key]
         public int Id { get; set; }
 
-        public string uid { get; set; } = Guid.NewGuid().ToString();
+        public string Uid { get; set; } = Guid.NewGuid().ToString();
 
-        //property
         [Range(10, 100)]
-        public int? price { get; set; }
+        public int? Price { get; set; }
 
-        //علامة الاستفهام معناه // أن الخاصية يمكن أن تكون فارغة (nullable)
         public string? Name { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
-        
+        // One-to-Many: Category -> Products
+        public ICollection<Product> Products { get; set; } = new List<Product>();
 
     }
 }
+// Compare this snippet from AlWaleemah/Repository/IRepoProduct.cs:

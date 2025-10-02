@@ -22,52 +22,6 @@ namespace AlWaleemah.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("AlWaleemah.Models.Cat2", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("price")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Categorie2");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Electronic gadgets and devices",
-                            Name = "Electronics",
-                            price = 50
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Apparel and accessories",
-                            Name = "Clothing",
-                            price = 30
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "Fiction and non-fiction books",
-                            Name = "Books",
-                            price = 20
-                        });
-                });
-
             modelBuilder.Entity("AlWaleemah.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -77,16 +31,15 @@ namespace AlWaleemah.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("price")
+                    b.Property<int?>("Price")
                         .HasColumnType("int");
 
-                    b.Property<string>("uid")
+                    b.Property<string>("Uid")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -161,9 +114,8 @@ namespace AlWaleemah.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -178,16 +130,34 @@ namespace AlWaleemah.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Qty")
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<string>("uid")
+                    b.Property<string>("Uid")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("AlWaleemah.Models.Product", b =>
+                {
+                    b.HasOne("AlWaleemah.Models.Category", "Category")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("AlWaleemah.Models.Category", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }
