@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AlWaleemah.Controllers
 {
+    
     public class AccountController : Controller
     {
 
@@ -17,7 +18,7 @@ namespace AlWaleemah.Controllers
         public IActionResult Logout()
         {
 
-            HttpContext.Session.Clear();
+            HttpContext.Session.Clear();// حذف بيانت المستخدم من الجلسة
             return View("Login");
         }
 
@@ -30,7 +31,7 @@ namespace AlWaleemah.Controllers
         [HttpPost]
         public IActionResult Login(string username, string password)
         {
-            //var emp = _unitOfWork.Employees.Login(username, password);
+            var emp = _unitOfWork.Employees.Login(username, password);
 
 
 
@@ -44,21 +45,23 @@ namespace AlWaleemah.Controllers
 
             //    }
 
-            //    if (emp.UserRoleId == 1)
-            //    {
+            //    //if (emp.UserRoleId == 1)
+            //    //{
 
-            //        HttpContext.Session.SetString("Username", emp.FirstName);
-            //        HttpContext.Session.SetInt32("Id", emp.Id);
-            //        return RedirectToAction("Index", "Home");
+            //    //    HttpContext.Session.SetString("Username", emp.FirstName);
+            //    //    HttpContext.Session.SetInt32("Id", emp.Id);
+            //    //    return RedirectToAction("Index", "Home");
 
-            //    }
+            //    //}
             //    else
             //    {
 
 
             //        HttpContext.Session.SetString("UsernameEmployee", emp.FirstName);
             //        HttpContext.Session.SetInt32("Id", emp.Id);
-            //        return RedirectToAction("Index", "HomeEmployee");
+            //        return RedirectToAction("Index", "Home");
+
+            //        //return RedirectToAction("Index", "HomeEmployee");
 
 
             //    }

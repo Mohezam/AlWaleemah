@@ -17,7 +17,7 @@ namespace AlWaleemah.Repository
 
             public Employee Login(string username, string password)
             {
-                var emp = _context.Employees.FirstOrDefault(e => e.Username == username && e.Password == password);
+                var emp = _context.Employees.FirstOrDefault(e => e.Username == username && e.Password == password && !e.Islock);
                 return emp;
             }
 

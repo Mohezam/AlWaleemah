@@ -3,7 +3,12 @@
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger" style="margin-bottom:10px; text-align:center;">
+        @ViewBag.Error
+    </div>
+}
 
 
 

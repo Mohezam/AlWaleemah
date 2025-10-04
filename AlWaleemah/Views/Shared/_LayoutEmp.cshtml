@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <title>@ViewData["Title"] - Admin Dashboard </title>
+    <title>@ViewData["Title"] - Employee Dashboard </title>
 
     <!-- CSS Libraries -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -335,7 +335,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"> مرحبا @Context.Session.GetString("Username")</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"> مرحبا @Context.Session.GetString("UsernameEmployee")</span>
                                 <img class="img-profile rounded-circle"
                                      src="~/Dashbord/img/undraw_profile.svg">
                             </a>

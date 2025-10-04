@@ -8,9 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using AlWaleemah.Data;
 using AlWaleemah.Models;
 using AlWaleemah.Repository.Base;
+using AlWaleemah.Filters;
 
 namespace AlWaleemah.Controllers
 {
+    
+    [SessionAuthorize]
     public class EmployeesController : Controller
     {
         private readonly Applicationdbcontext _context;

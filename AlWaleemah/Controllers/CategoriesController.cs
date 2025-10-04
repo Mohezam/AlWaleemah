@@ -1,4 +1,5 @@
 ﻿using AlWaleemah.Data;
+using AlWaleemah.Filters;
 using AlWaleemah.Models;
 using AlWaleemah.Repository.Base;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AlWaleemah.Controllers
 {
+    [SessionAuthorize]
     public class CategoriesController : Controller
     {
         private readonly Applicationdbcontext _context;

@@ -39,8 +39,13 @@ namespace AlWaleemah.Data
         }
         public DbSet<Employee> Employees { get; set; }
 
-
+        public DbSet<UserRole> UserRoles { get; set; }
 
 
     }
+
+
+
+
+        
 }

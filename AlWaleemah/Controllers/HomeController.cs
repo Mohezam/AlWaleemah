@@ -15,6 +15,10 @@ namespace AlWaleemah.Controllers
 
         public IActionResult Index()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("Username")))
+            {
+                return RedirectToAction("Login", "Account");
+            }
             return View();
         }
 

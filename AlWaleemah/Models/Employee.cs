@@ -24,6 +24,8 @@ namespace AlWaleemah.Models
 
         public int? UserRoleId { get; set; }
 
+        public virtual UserRole? UserRole { get; set; }
+
 
         //public virtual UserRole? UserRole { get; set; }
         //public virtual ICollection<Permission>? Permissions { get; set; }
