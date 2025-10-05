@@ -18,7 +18,7 @@ namespace AlWaleemah.Models
         public string? Description { get; set; }
 
         // One-to-Many: Category -> Products
-        public ICollection<Product> Products { get; set; } = new List<Product>();
+        public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 
     }
 }

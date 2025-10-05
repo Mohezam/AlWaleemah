@@ -22,7 +22,8 @@ builder.Services.AddSession(options =>
 
 //// Register the DbContext with the connection string
 builder.Services.AddDbContext<Applicationdbcontext>(options =>
-    options.UseSqlServer(connectionString));
+options.UseLazyLoadingProxies()
+    .UseSqlServer(connectionString));
 
 //builder.Services.AddDbContext<Applicationdbcontext>(options =>
 //options.UseLazyLoadingProxies().

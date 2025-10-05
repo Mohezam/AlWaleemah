@@ -13,6 +13,8 @@ namespace AlWaleemah.Repository.Base
 
         IRepository<Employee> Employee { get; }
 
+        IRepository<Permission> Permission { get; }
+
         void Save();
     }
 }

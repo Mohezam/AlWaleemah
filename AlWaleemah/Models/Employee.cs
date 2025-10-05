@@ -26,9 +26,11 @@ namespace AlWaleemah.Models
 
         public virtual UserRole? UserRole { get; set; }
 
+        public virtual ICollection<Permission>? Permissions { get; set; }
+
+
 
         //public virtual UserRole? UserRole { get; set; }
-        //public virtual ICollection<Permission>? Permissions { get; set; }
         //public string PhoneNumber { get; set; }
         //public DateTime DateOfBirth { get; set; }
         //public string Address { get; set; }

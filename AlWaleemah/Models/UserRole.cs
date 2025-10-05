@@ -10,3 +10,4 @@
 
     }
 }
+// Compare this snippet from AlWaleemah/Models/Permission.cs:

@@ -1,0 +1,6 @@
+@AlWaleemah_Api_HostAddress = http://localhost:5003
+
+GET {{AlWaleemah_Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

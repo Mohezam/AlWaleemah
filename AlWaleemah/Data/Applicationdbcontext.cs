@@ -11,7 +11,7 @@ namespace AlWaleemah.Data
         }
 
 
-        public DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
 
         //public DbSet<Cat2> Categorie2 { get; set; }
 
@@ -26,7 +26,7 @@ namespace AlWaleemah.Data
 
         //}
 
-        public DbSet<Product> Products { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -37,9 +37,11 @@ namespace AlWaleemah.Data
             .OnDelete(DeleteBehavior.Cascade); // Optional: Define delete behaviorz
 
         }
-        public DbSet<Employee> Employees { get; set; }
+        public virtual DbSet<Employee> Employees { get; set; }
 
-        public DbSet<UserRole> UserRoles { get; set; }
+        public virtual DbSet<UserRole> UserRoles { get; set; }
+
+        public virtual DbSet<Permission> Permissions { get; set; }
 
 
     }
