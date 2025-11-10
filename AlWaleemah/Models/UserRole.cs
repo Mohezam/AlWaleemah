@@ -6,7 +6,7 @@
         public string Name { get; set; }
         //public string Description { get; set; }
         //// Navigation property for related Employees
-        //public virtual ICollection<Employee> Employees { get; set; }
+        public virtual ICollection<Employee> Employees { get; set; }
 
     }
 }

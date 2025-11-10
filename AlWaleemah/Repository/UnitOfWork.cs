@@ -18,6 +18,10 @@ namespace AlWaleemah.Repository
             Permission = new MainRepository<Permission>(_context);
             RepoCategory = new RepoCategory(_context);
             Employee = new MainRepository<Employee>(_context);
+            Utilities = new RepoUtility(_context);
+
+
+
 
         }
 
@@ -32,8 +36,7 @@ namespace AlWaleemah.Repository
         public IRepoCategory RepoCategory { get; }
 
         public IRepository<Employee> Employee { get; }
-
-
+        public IRepoUtilities Utilities { get; private set; }
 
 
         public void Save()

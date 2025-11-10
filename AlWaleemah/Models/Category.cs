@@ -10,9 +10,6 @@ namespace AlWaleemah.Models
 
         public string Uid { get; set; } = Guid.NewGuid().ToString();
 
-        [Range(10, 100)]
-        public int? Price { get; set; }
-
         public string? Name { get; set; }
 
         public string? Description { get; set; }

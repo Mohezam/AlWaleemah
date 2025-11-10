@@ -1,0 +1,105 @@
+﻿@model AlWaleemah.Models.Utility
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Delete</h1>
+
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h3 text-danger mb-1">حذف الأداة</h1>
+                    <p class="text-muted mb-0">تأكيد حذف الأداة من النظام</p>
+                </div>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>العودة للقائمة
+                </a>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-danger text-white py-3">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-exclamation-triangle me-2"></i>تأكيد الحذف
+                    </h5>
+                </div>
+
+                <div class="card-body p-4">
+                    <div class="alert alert-warning">
+                        <h5 class="alert-heading"><i class="bi bi-warning me-2"></i>تحذير!</h5>
+                        <p class="mb-0">أنت على وشك حذف الأداة "<strong>@Model.Name</strong>". هذا الإجراء لا يمكن التراجع عنه.</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-muted">اسم الأداة</label>
+                                <p>@Model.Name</p>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-muted">نوع الأداة</label>
+                                <p><span class="badge bg-secondary">@Model.Type</span></p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-muted">القيمة</label>
+                                @if (Model.Type == UtilityType.Color)
+                                {
+                                    <div class="d-flex align-items-center">
+                                        <div class="color-preview me-2" style="width: 20px; height: 20px; background-color: @Model.Value; border: 1px solid #ddd;"></div>
+                                        <code>@Model.Value</code>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <code>@Model.Value</code>
+                                }
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-muted">الحالة</label>
+                                <p>
+                                    @if (Model.IsActive)
+                                    {
+                                        <span class="badge bg-success">مفعل</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">غير مفعل</span>
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Description))
+                    {
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-muted">الوصف</label>
+                            <p class="bg-light p-3 rounded">@Model.Description</p>
+                        </div>
+                    }
+
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="form-group mt-4 pt-3 border-top">
+                            <div class="d-flex gap-2 justify-content-end">
+                                <a asp-action="Index" class="btn btn-outline-secondary">إلغاء</a>
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="bi bi-trash me-2"></i>تأكيد الحذف
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

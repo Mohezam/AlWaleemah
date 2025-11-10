@@ -15,6 +15,8 @@ namespace AlWaleemah.Repository.Base
 
         IRepository<Permission> Permission { get; }
 
-        void Save();
+        IRepoUtilities Utilities { get; }
+
+        void Save(); 
     }
 }

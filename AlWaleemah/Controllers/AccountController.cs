@@ -35,50 +35,50 @@ namespace AlWaleemah.Controllers
 
 
 
-            if (emp != null)
-            {
-                if (emp.Islock)
-                {
-
-                    ViewBag.Error = "تم اغلاق  هذا المستخدم  يرجي مراجعة الادمن";
-                    return View();
-
-                }
-
-                if (emp.UserRoleId == 1)
-                {
-
-                    HttpContext.Session.SetString("Username", emp.FirstName);
-                    HttpContext.Session.SetInt32("Id", emp.Id);
-                    return RedirectToAction("Index", "Home");
-
-                }
-                else
-                {
-
-
-                    HttpContext.Session.SetString("UsernameEmployee", emp.FirstName);
-                    HttpContext.Session.SetInt32("Id", emp.Id);
-                    return RedirectToAction("Index", "HomeEmployees");
-
-                    //return RedirectToAction("Index", "HomeEmployee");
-
-
-                }
-
-
-
-
-
-            }
-
-            //    if (username == "admin" && password == "123")
+            //if (emp != null)
             //{
+            //    if (emp.Islock)
+            //    {
 
-            //    HttpContext.Session.SetString("Username", username);
-            //    HttpContext.Session.SetInt32("Id", 100);
-            //    return RedirectToAction("Index", "Home");
+            //        ViewBag.Error = "تم اغلاق  هذا المستخدم  يرجي مراجعة الادمن";
+            //        return View();
+
+            //    }
+
+            //    if (emp.UserRoleId == 1)
+            //    {
+
+            //        HttpContext.Session.SetString("Username", emp.FirstName);
+            //        HttpContext.Session.SetInt32("Id", emp.Id);
+            //        return RedirectToAction("Index", "Home");
+
+            //    }
+            //    else
+            //    {
+
+
+            //        HttpContext.Session.SetString("UsernameEmployee", emp.FirstName);
+            //        HttpContext.Session.SetInt32("Id", emp.Id);
+            //        return RedirectToAction("Index", "HomeEmployees");
+
+            //        //return RedirectToAction("Index", "HomeEmployee");
+
+
+            //    }
+
+
+
+
+
             //}
+
+            if (username == "admin" && password == "123")
+            {
+
+                HttpContext.Session.SetString("Username", username);
+                HttpContext.Session.SetInt32("Id", 100);
+                return RedirectToAction("Index", "Home");
+            }
 
             ViewBag.Error = "خطا في اسم المستخدو او كلمة المرور";
                 return View();

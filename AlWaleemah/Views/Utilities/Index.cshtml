@@ -1,0 +1,380 @@
+﻿@model IEnumerable<AlWaleemah.Models.Utility>
+
+@{
+    ViewData["Title"] = "الأدوات المساعدة";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 text-primary">
+            <i class="bi bi-tools me-2"></i>@ViewData["Title"]
+        </h1>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle me-2"></i>إضافة أداة جديدة
+        </a>
+    </div>
+
+    <!-- فلاتر سريعة -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <a asp-action="ByType" asp-route-type="Color" class="btn btn-outline-primary w-100">
+                <i class="bi bi-palette me-2"></i>الألوان
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a asp-action="ByType" asp-route-type="Border" class="btn btn-outline-success w-100">
+                <i class="bi bi-border-width me-2"></i>الحدود
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a asp-action="ByType" asp-route-type="Animation" class="btn btn-outline-warning w-100">
+                <i class="bi bi-play-circle me-2"></i>الحركات
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a asp-action="ByType" asp-route-type="Other" class="btn btn-outline-info w-100">
+                <i class="bi bi-gear me-2"></i>أخرى
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Add"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>@TempData["Add"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Update"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>@TempData["Update"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Delete"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>@TempData["Delete"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-light py-3">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h5 class="card-title mb-0 text-dark">
+                        <i class="bi bi-list-ul me-2"></i>قائمة الأدوات المساعدة
+                    </h5>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <input type="text" id="searchInput" class="form-control" placeholder="ابحث في الأدوات...">
+                        <button class="btn btn-outline-secondary" type="button" id="searchButton">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover" id="utilitiesTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th>اسم الأداة</th>
+                                <th>النوع</th>
+                                <th>القيمة</th>
+                                <th>الفئة</th>
+                                <th>الحالة</th>
+                                <th>تاريخ الإنشاء</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            @if (item.Type == AlWaleemah.Models.UtilityType.Color)
+                                            {
+                                                <div class="color-preview me-3" style="width: 20px; height: 20px; background-color: @item.Value; border: 1px solid #ddd; border-radius: 3px;"></div>
+                                            }
+                                            else if (item.Type == AlWaleemah.Models.UtilityType.Border)
+                                            {
+                                                <i class="bi bi-border-width text-primary me-3"></i>
+                                            }
+                                            else if (item.Type == AlWaleemah.Models.UtilityType.Animation)
+                                            {
+                                                <i class="bi bi-play-circle text-warning me-3"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-gear text-info me-3"></i>
+                                            }
+                                            <div>
+                                                <strong>@item.Name</strong>
+                                                @if (!string.IsNullOrEmpty(item.Description))
+                                                {
+                                                    <br />
+                                                    <small class="text-muted">@item.Description</small>
+                                                }
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @switch (item.Type)
+                                        {
+                                            case AlWaleemah.Models.UtilityType.Color:
+                                                <span class="badge bg-primary">@item.Type</span>
+                                                break;
+                                            case AlWaleemah.Models.UtilityType.Border:
+                                                <span class="badge bg-success">@item.Type</span>
+                                                break;
+                                            case AlWaleemah.Models.UtilityType.Animation:
+                                                <span class="badge bg-warning text-dark">@item.Type</span>
+                                                break;
+                                            case AlWaleemah.Models.UtilityType.Other:
+                                                <span class="badge bg-info">@item.Type</span>
+                                                break;
+                                            default:
+                                                <span class="badge bg-secondary">@item.Type</span>
+                                                break;
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.Type == AlWaleemah.Models.UtilityType.Color)
+                                        {
+                                            <div class="d-flex align-items-center">
+                                                <code class="text-truncate" style="max-width: 150px;" title="@item.Value">@item.Value</code>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <code class="text-truncate" style="max-width: 200px;" title="@item.Value">@item.Value</code>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(item.Category))
+                                        {
+                                            <span class="badge bg-light text-dark">@item.Category</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.IsActive)
+                                        {
+                                            <span class="badge bg-success">
+                                                <i class="bi bi-check-circle me-1"></i>مفعل
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">
+                                                <i class="bi bi-x-circle me-1"></i>غير مفعل
+                                            </span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">@item.CreatedAt.ToString("yyyy/MM/dd")</small>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info" title="عرض التفاصيل">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary" title="تعديل">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger" title="حذف">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- إحصائيات -->
+                <div class="row mt-4">
+                    <div class="col-md-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body text-center">
+                                <h4 class="card-title">@Model.Count()</h4>
+                                <p class="card-text">إجمالي الأدوات</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body text-center">
+                                <h4 class="card-title">@Model.Count(u => u.Type == AlWaleemah.Models.UtilityType.Color)</h4>
+                                <p class="card-text">الألوان</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body text-center">
+                                <h4 class="card-title">@Model.Count(u => u.Type == AlWaleemah.Models.UtilityType.Animation)</h4>
+                                <p class="card-text">الحركات</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body text-center">
+                                <h4 class="card-title">@Model.Count(u => u.IsActive)</h4>
+                                <p class="card-text">الأدوات المفعلة</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="bi bi-inbox display-1 text-muted"></i>
+                    <h4 class="text-muted mt-3">لا توجد أدوات مساعدة</h4>
+                    <p class="text-muted">ابدأ بإضافة أول أداة مساعدة للنظام</p>
+                    <a asp-action="Create" class="btn btn-primary mt-3">
+                        <i class="bi bi-plus-circle me-2"></i>إضافة أداة جديدة
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // البحث في الجدول
+            const searchInput = document.getElementById('searchInput');
+            const searchButton = document.getElementById('searchButton');
+            const table = document.getElementById('utilitiesTable');
+
+            function filterTable() {
+                const filter = searchInput.value.toLowerCase();
+                const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+                for (let i = 0; i < rows.length; i++) {
+                    const cells = rows[i].getElementsByTagName('td');
+                    let found = false;
+
+                    for (let j = 0; j < cells.length; j++) {
+                        const cellText = cells[j].textContent || cells[j].innerText;
+                        if (cellText.toLowerCase().indexOf(filter) > -1) {
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (found) {
+                        rows[i].style.display = '';
+                    } else {
+                        rows[i].style.display = 'none';
+                    }
+                }
+            }
+
+            searchInput.addEventListener('keyup', filterTable);
+            searchButton.addEventListener('click', filterTable);
+
+            // إضافة تأثيرات للبطاقات الإحصائية
+            const statCards = document.querySelectorAll('.card.bg-primary, .card.bg-success, .card.bg-warning, .card.bg-info');
+            statCards.forEach(card => {
+                card.style.transition = 'transform 0.2s ease-in-out';
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // إضافة تأثيرات لصفوف الجدول
+            const tableRows = document.querySelectorAll('#utilitiesTable tbody tr');
+            tableRows.forEach(row => {
+                row.style.transition = 'background-color 0.2s ease-in-out';
+                row.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = '#f8f9fa';
+                });
+                row.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = '';
+                });
+            });
+        });
+    </script>
+}
+
+<style>
+    .color-preview {
+        display: inline-block;
+        border: 1px solid #dee2e6;
+        flex-shrink: 0;
+    }
+
+    .table th {
+        border-top: none;
+        font-weight: 600;
+        color: #495057;
+        background-color: #f8f9fa;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .card-header {
+        border-bottom: 1px solid #e3e6f0;
+    }
+
+    .btn-group-sm > .btn {
+        border-radius: 5px;
+        margin: 0 2px;
+    }
+
+    .badge {
+        font-size: 0.75em;
+        font-weight: 500;
+    }
+
+    code {
+        background-color: #f8f9fa;
+        padding: 0.2rem 0.4rem;
+        border-radius: 3px;
+        font-size: 0.875em;
+        color: #e83e8c;
+    }
+
+    .stat-card {
+        transition: transform 0.2s ease-in-out;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+</style>

@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data" method="post" enctype="multipart/form-data">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ProductName" class="control-label"></label>
@@ -27,7 +27,7 @@
 
 
 
-        @*     <div class="form-group">
+            <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
                 <select asp-for="CategoryId" class="form-control" asp-items="@ViewBag.Categories">
                     <option selected disabled value="0">Select Category</option>
@@ -39,7 +39,7 @@
 
 
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
-            </div> *@
+            </div>
             <div class="form-group">
                 <label asp-for="Quantity" class="control-label"></label>
                 <input asp-for="Quantity" class="form-control" />
@@ -71,3 +71,45 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        // تأثيرات التحديد للتصنيف - التصحيح
+        document.addEventListener('DOMContentLoaded', function() {
+            const categorySelect = document.querySelector('select[name="CategoryId"]');
+
+            if (categorySelect) {
+                categorySelect.addEventListener('change', function() {
+                    if (this.value) {
+                        this.classList.add('is-valid');
+                        this.classList.remove('is-invalid');
+                    } else {
+                        this.classList.remove('is-valid');
+                        this.classList.add('is-invalid');
+                    }
+                });
+
+                // تشغيل الحدث مرة واحدة عند التحميل لتحديد الحالة الأولية
+                categorySelect.dispatchEvent(new Event('change'));
+            }
+
+            // إضافة تأثيرات للحقول الأخرى
+            const inputs = document.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    if (this.value.trim() !== '') {
+                        this.classList.add('is-valid');
+                        this.classList.remove('is-invalid');
+                    } else {
+                        this.classList.remove('is-valid');
+                        this.classList.add('is-invalid');
+                    }
+                });
+            });
+        });
+    </script>
+}

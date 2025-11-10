@@ -25,21 +25,21 @@
     </thead>
     <tbody>
 
-        @foreach (var category in Model)
+        @foreach (var product in Model)
         {
             <tr>
-                <td>@category.Id</td>
-                <td>@category.ProductName</td>
-                <td>@category.Description</td>
-                <td>@category.Price</td>
-                <td>@category.Quantity</td>
-                @* <td>@category.Category?</td> *@
+                <td>@product.Id</td>
+                <td>@product.ProductName</td>
+                <td>@product.Description</td>
+                <td>@product.Price</td>
+                <td>@product.Quantity</td>
+                <td>@product.Category?.Name</td>
                 <td>
-                    <img src="@category.ImageUrl" width="200" height="150" />
+                    <img src="@product.ImageUrl" width="150" height="150" />
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@category.Id" class="btn btn-warning">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@category.Id" class="btn btn-danger">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger">Delete</a>
             </tr>
 
         }

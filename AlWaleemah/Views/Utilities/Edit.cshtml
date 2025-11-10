@@ -1,0 +1,112 @@
+﻿@model AlWaleemah.Models.Utility
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h3 text-primary mb-1">تعديل الأداة</h1>
+                    <p class="text-muted mb-0">تعديل معلومات الأداة في النموذج أدناه</p>
+                </div>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>العودة للقائمة
+                </a>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-warning text-white py-3">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-pencil-square me-2"></i>تعديل الأداة: @Model.Name
+                    </h5>
+                </div>
+
+                <div class="card-body p-4">
+                    <form asp-action="Edit" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label asp-for="Name" class="form-label fw-bold">اسم الأداة</label>
+                                    <input asp-for="Name" class="form-control" />
+                                    <span asp-validation-for="Name" class="text-danger small"></span>
+                                </div>
+
+                                <div class="form-group mb-4">
+                                    <label asp-for="Type" class="form-label fw-bold">نوع الأداة</label>
+                                    <select asp-for="Type" class="form-select" asp-items="@ViewBag.UtilityTypes">
+                                        <option value="">-- اختر النوع --</option>
+                                    </select>
+                                    <span asp-validation-for="Type" class="text-danger small"></span>
+                                </div>
+
+                                <div class="form-group mb-4">
+                                    <label asp-for="Category" class="form-label fw-bold">الفئة (اختياري)</label>
+                                    <input asp-for="Category" class="form-control" />
+                                    <span asp-validation-for="Category" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group mb-4">
+                                    <label asp-for="Value" class="form-label fw-bold">القيمة</label>
+                                    <input asp-for="Value" class="form-control" />
+                                    <span asp-validation-for="Value" class="text-danger small"></span>
+                                </div>
+
+                                <div class="form-group mb-4">
+                                    <label asp-for="Description" class="form-label fw-bold">الوصف (اختياري)</label>
+                                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                                    <span asp-validation-for="Description" class="text-danger small"></span>
+                                </div>
+
+                                <div class="form-group mb-4">
+                                    <div class="form-check form-switch">
+                                        <input asp-for="IsActive" class="form-check-input" type="checkbox">
+                                        <label asp-for="IsActive" class="form-check-label fw-bold">مفعل</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h6 class="card-title">معلومات النظام</h6>
+                                        <p class="mb-1"><small>تاريخ الإنشاء: @Model.CreatedAt.ToString("yyyy/MM/dd HH:mm")</small></p>
+                                        @if (Model.UpdatedAt.HasValue)
+                                        {
+                                            <p class="mb-0"><small>آخر تحديث: @Model.UpdatedAt.Value.ToString("yyyy/MM/dd HH:mm")</small></p>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-4 pt-3 border-top">
+                            <div class="d-flex gap-2 justify-content-end">
+                                <a asp-action="Index" class="btn btn-outline-secondary">إلغاء</a>
+                                <button type="submit" class="btn btn-warning">تحديث الأداة</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

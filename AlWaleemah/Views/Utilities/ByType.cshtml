@@ -1,0 +1,140 @@
+﻿@model IEnumerable<AlWaleemah.Models.Utility>
+@{
+    ViewData["Title"] = $"أدوات {ViewBag.UtilityType}";
+    var utilityType = ViewBag.UtilityType as AlWaleemah.Models.UtilityType?;
+}
+
+<h1>ByType</h1>
+
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 text-primary mb-1">
+                <i class="bi bi-collection me-2"></i>@ViewData["Title"]
+            </h1>
+            <p class="text-muted mb-0">عرض جميع أدوات @utilityType في النظام</p>
+        </div>
+        <div>
+            <a asp-action="Create" class="btn btn-primary me-2">
+                <i class="bi bi-plus-circle me-2"></i>إضافة أداة جديدة
+            </a>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="bi bi-grid me-2"></i>عرض الكل
+            </a>
+        </div>
+    </div>
+
+    <!-- بطاقات سريعة للأنواع -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <a asp-action="ByType" asp-route-type="Color" class="btn @(utilityType == AlWaleemah.Models.UtilityType.Color ? "btn-primary" : "btn-outline-primary") w-100">
+                <i class="bi bi-palette me-2"></i>الألوان
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a asp-action="ByType" asp-route-type="Border" class="btn @(utilityType == AlWaleemah.Models.UtilityType.Border ? "btn-success" : "btn-outline-success") w-100">
+                <i class="bi bi-border-width me-2"></i>الحدود
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a asp-action="ByType" asp-route-type="Animation" class="btn @(utilityType == AlWaleemah.Models.UtilityType.Animation ? "btn-warning" : "btn-outline-warning") w-100">
+                <i class="bi bi-play-circle me-2"></i>الحركات
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a asp-action="ByType" asp-route-type="Other" class="btn @(utilityType == AlWaleemah.Models.UtilityType.Other ? "btn-info" : "btn-outline-info") w-100">
+                <i class="bi bi-gear me-2"></i>أخرى
+            </a>
+        </div>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h6 class="card-title mb-0">@item.Name</h6>
+                            <span class="badge bg-secondary">@item.Type</span>
+                        </div>
+                        <div class="card-body">
+                            @if (item.Type == AlWaleemah.Models.UtilityType.Color)
+                            {
+                                <div class="text-center mb-3">
+                                    <div class="color-preview mx-auto" style="width: 100px; height: 100px; background-color: @item.Value; border: 2px solid #dee2e6; border-radius: 8px;"></div>
+                                </div>
+                            }
+
+                            <div class="mb-2">
+                                <strong>القيمة:</strong>
+                                <code class="d-block mt-1 p-2 bg-light rounded">@item.Value</code>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(item.Description))
+                            {
+                                <div class="mb-2">
+                                    <strong>الوصف:</strong>
+                                    <p class="mt-1">@item.Description</p>
+                                </div>
+                            }
+
+                            @if (!string.IsNullOrEmpty(item.Category))
+                            {
+                                <div class="mb-2">
+                                    <strong>الفئة:</strong>
+                                    <span class="badge bg-light text-dark">@item.Category</span>
+                                </div>
+                            }
+
+                            <div class="mb-2">
+                                <strong>الحالة:</strong>
+                                @if (item.IsActive)
+                                {
+                                    <span class="badge bg-success">مفعل</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">غير مفعل</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <div class="btn-group w-100">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info btn-sm">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <i class="bi bi-inbox display-1 text-muted"></i>
+            <h4 class="text-muted mt-3">لا توجد أدوات من نوع @utilityType</h4>
+            <p class="text-muted">ابدأ بإضافة أول أداة من هذا النوع</p>
+            <a asp-action="Create" class="btn btn-primary mt-3">
+                <i class="bi bi-plus-circle me-2"></i>إضافة أداة جديدة
+            </a>
+        </div>
+    }
+</div>
+
+<style>
+    .color-preview {
+        display: inline-block;
+        border: 1px solid #dee2e6;
+    }
+</style>

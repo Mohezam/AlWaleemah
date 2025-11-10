@@ -2,7 +2,7 @@
 
 namespace AlWaleemah.Repository.Base
 {
-    public interface IRepoProduct
+    public interface IRepoProduct:IRepository<Product>
     {
 
         IEnumerable<Product> FindAllproducts();

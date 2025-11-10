@@ -13,41 +13,59 @@ namespace AlWaleemah.Data
 
         public virtual DbSet<Category> Categories { get; set; }
 
-        //public DbSet<Cat2> Categorie2 { get; set; }
-
-
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<Cat2>().HasData(
-        //        new Categorys { Id = 1, Name = "Electronics", Description = "Electronic gadgets and devices", price = 50 },
-        //        new Categorys { Id = 2, Name = "Clothing", Description = "Apparel and accessories", price = 30 },
-        //        new Categorys { Id = 3, Name = "Books", Description = "Fiction and non-fiction books", price = 20 }
-        //    );
-
-        //}
-
         public virtual DbSet<Product> Products { get; set; }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Product>()
-            .HasOne(p => p.Category)
-             .WithMany(c => c.Products)   // ← مطابق لاسم ICollection في Category
-              .HasForeignKey(p => p.CategoryId)
-            .OnDelete(DeleteBehavior.Cascade); // Optional: Define delete behaviorz
 
-        }
         public virtual DbSet<Employee> Employees { get; set; }
 
         public virtual DbSet<UserRole> UserRoles { get; set; }
 
         public virtual DbSet<Permission> Permissions { get; set; }
 
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Utility> Utilities { get; set; }
+        public virtual DbSet<Customer> Customers { get; set; }
 
+        public virtual DbSet<CartItem> CartItems { get; set; }
+
+
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // تكوين الـ Utility
+            modelBuilder.Entity<Utility>(entity =>
+            {
+                entity.HasKey(u => u.Id);
+                entity.Property(u => u.Name).IsRequired().HasMaxLength(100);
+                entity.Property(u => u.Value).IsRequired().HasMaxLength(200);
+                entity.Property(u => u.Description).HasMaxLength(500);
+                entity.Property(u => u.Category).HasMaxLength(100);
+                entity.Property(u => u.Type).IsRequired().HasConversion<string>();
+            });
+
+
+
+
+
+            //protected override void OnModelCreating(ModelBuilder modelBuilder)
+            //{
+            //    base.OnModelCreating(modelBuilder);
+            //    modelBuilder.Entity<Product>()
+            //    .HasOne(p => p.Category)
+            //     .WithMany(c => c.Products)   // ← مطابق لاسم ICollection في Category
+            //      .HasForeignKey(p => p.CategoryId)
+            //    .OnDelete(DeleteBehavior.Cascade); // Optional: Define delete behaviorz
+
+            //}
+
+        }
     }
+}
 
 
 
 
         
-}
+
