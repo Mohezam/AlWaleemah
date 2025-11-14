@@ -18,7 +18,12 @@ namespace AlWaleemah.Models
         public int CategoryId { get; set; }
 
         // Navigation Property
+      
         public virtual Category? Category { get; set; }
+
+        //  public int StockQty { get; set; }         // المخزون المتاح
+        public int ReservedQty { get; set; }      // المحجوز مؤقتاً
+        public byte[]? RowVersion { get; set; }   // للمنافسة المتزامنة (Concurrency)
 
         public int Quantity { get; set; }
 

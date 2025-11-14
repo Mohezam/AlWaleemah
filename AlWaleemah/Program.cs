@@ -1,6 +1,8 @@
 ﻿using AlWaleemah.Data;
+using AlWaleemah.interfaces;
 using AlWaleemah.Repository;
 using AlWaleemah.Repository.Base;
+using AlWaleemah.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +11,13 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IRepoProduct, RepoProduct>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<ICheckoutService, CheckoutService>();
+builder.Services.AddScoped<ICartItemRepository, CartItemRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+
+
+
+
 // Get the connection string from appsettings.json
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");

@@ -1,6 +1,7 @@
 ﻿using AlWaleemah.Data;
 using AlWaleemah.Models;
 using AlWaleemah.Repository.Base;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace AlWaleemah.Repository
 {
@@ -19,6 +20,9 @@ namespace AlWaleemah.Repository
             RepoCategory = new RepoCategory(_context);
             Employee = new MainRepository<Employee>(_context);
             Utilities = new RepoUtility(_context);
+            CartItemsRepository = new CartItemRepository(_context);
+           // ProductsRepository = new ProductRepository(_context);
+            OrdersRepository = new OrderRepository(_context);
 
 
 
@@ -37,6 +41,16 @@ namespace AlWaleemah.Repository
 
         public IRepository<Employee> Employee { get; }
         public IRepoUtilities Utilities { get; private set; }
+
+        public ICartItemRepository CartItemsRepository { get; }
+        //public IProductRepository ProductsRepository { get; }
+        public IOrderRepository OrdersRepository { get; }
+
+        public Task<int> SaveChangesAsync() => _context.SaveChangesAsync();
+
+        public Task<IDbContextTransaction> BeginTransactionAsync() =>
+            _context.Database.BeginTransactionAsync();
+
 
 
         public void Save()

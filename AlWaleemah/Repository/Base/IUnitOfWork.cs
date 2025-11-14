@@ -1,4 +1,5 @@
 ﻿using AlWaleemah.Models;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace AlWaleemah.Repository.Base
 {
@@ -16,6 +17,15 @@ namespace AlWaleemah.Repository.Base
         IRepository<Permission> Permission { get; }
 
         IRepoUtilities Utilities { get; }
+
+        ICartItemRepository CartItemsRepository { get; }
+       // IProductRepository ProductsRepository { get; }
+        IOrderRepository OrdersRepository { get; }
+
+        Task<int> SaveChangesAsync();
+
+
+        Task<IDbContextTransaction> BeginTransactionAsync();
 
         void Save(); 
     }

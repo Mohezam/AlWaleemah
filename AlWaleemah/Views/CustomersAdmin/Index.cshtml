@@ -1,0 +1,59 @@
+﻿@model IEnumerable<AlWaleemah.Models.Customer>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<div class="text-end">
+    <a asp-action="Create" class="btn btn-primary mb-3">Create New</a>
+</div>
+
+<table class="table table-striped mb-3">
+
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Password</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var customer in Model)
+        {
+            <tr>
+                <td>@customer.Id</td>
+                <td>@customer.Name</td>
+                <td>@customer.Address</td>
+                <td>@customer.Phone</td>
+                <td>@customer.Email</td>
+                <td>@customer.Username</td>
+                <td>@customer.Password</td>
+                
+                @* <td>@product.Category?.Name</td>
+                <td>
+                    <img src="@product.ImageUrl" width="150" height="150" />
+                </td> *@
+                <td>
+                    <a asp-action="Edit" asp-route-id="@customer.Id" class="btn btn-warning">Edit</a>                
+                    <a asp-action="Details" asp-route-id="@customer.Id" class="btn btn-light" >Details </a> 
+                    <a asp-action="Delete" asp-route-id="@customer.Id" class="btn btn-danger">Delete</a>
+
+            </tr>
+
+        }
+
+
+
+    </tbody>
+
+
+</table>
+

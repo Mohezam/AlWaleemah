@@ -27,6 +27,9 @@ namespace AlWaleemah.Data
 
         public virtual DbSet<CartItem> CartItems { get; set; }
 
+        public virtual DbSet<Order> Orders { get; set; }
+
+
 
 
 
