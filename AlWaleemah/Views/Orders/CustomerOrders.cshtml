@@ -5,6 +5,115 @@
     Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
 }
 
+<div class="container mt-4">
+    <h2 class="text-primary">@ViewData["Title"]</h2>
+    <hr />
+
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning mt-4">
+            <i class="bi bi-exclamation-triangle"></i>
+            لا توجد طلبات لعرضها
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var order in Model)
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-light d-flex justify-content-between">
+                            <h5 class="mb-0">
+                                <i class="bi bi-receipt"></i>
+                                طلب رقم #@order.Id
+                            </h5>
+                            <span class="badge bg-info">@order.CreatedAt.ToString("yyyy/MM/dd")</span>
+                        </div>
+                        
+                        <div class="card-body">
+                            <h6 class="text-muted">المنتجات:</h6>
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>المنتج</th>
+                                            <th>الكمية</th>
+                                            <th>السعر</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in order.Items)
+                                        {
+                                            <tr>
+                                                <td>@item.Product?.ProductName</td>
+                                                <td>@item.Quantity</td>
+                                                <td>@item.UnitPrice.ToString("C")</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between mt-3 pt-3 border-top">
+                                <strong>المجموع:</strong>
+                                <strong class="text-success">
+                                    @order.Items.Sum(i => i.Quantity * i.UnitPrice).ToString("C")
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        .card {
+            border: 1px solid #e3e3e3;
+            border-radius: 10px;
+        }
+        .card-header {
+            border-bottom: 2px solid #dee2e6;
+        }
+        .table th {
+            border-top: none;
+            font-weight: 600;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        // تحديث حالة الطلب
+        function updateOrderStatus(orderId, status) {
+            fetch(`/Orders/UpdateStatus?orderId=${orderId}&status=${status}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    location.reload();
+                }
+            });
+        }
+
+        // تصدير إلى PDF
+        function exportToPdf(orderId) {
+            window.open(`/Orders/ExportPdf?orderId=${orderId}`, '_blank');
+        }
+    </script>
+}
+
+
+@* @* 
 <h1>CustomerOrders</h1>
 
 <div class="container mt-4">
@@ -48,7 +157,7 @@
                                 </span>
                             </td>
                             <td>@order.TotalAmount.ToString("C")</td> *@
-                            <td>@order.Items.Count</td>
+@*                             <td>@order.Items.Count</td>
                             <td>
                                 <a asp-action="Details" asp-route-id="@order.Id"
                                    class="btn btn-primary btn-sm">
@@ -98,4 +207,4 @@
             font-size: 0.85em;
         }
     </style>
-}
+} *@  

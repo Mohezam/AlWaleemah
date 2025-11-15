@@ -101,7 +101,7 @@
                                     </a>
                                 </li> *@
                                 <li>
-                                    <a class="dropdown-item" asp-controller="CustomerClient" asp-action="CustomerOrders">
+                                    <a class="dropdown-item" asp-controller="Orders" asp-action="CustomerOrders" asp-route-custId="@Context.Session.GetInt32(" IdCustomer")">
                                         <i class="bi bi-list-check me-2"></i>طلباتي
                                     </a>
                                 </li>
