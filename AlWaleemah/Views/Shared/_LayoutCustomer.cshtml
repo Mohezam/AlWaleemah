@@ -64,7 +64,7 @@
 
                 <div class="d-flex align-items-center gap-3">
                     <!-- Cart Button -->
-                    <a asp-controller="HomePage" asp-action="Cart" asp-route-custId="@Context.Session.GetInt32(" IdCustomer")" class="btn btn-outline-dark position-relative">
+                    <a asp-controller="HomePage" asp-action="Cart" asp-route-custId="@Context.Session.GetInt32("IdCustomer")" class="btn btn-outline-dark position-relative">
                         <i class="bi bi-cart-fill me-1"></i>
                         السلة
                         @{
@@ -101,7 +101,7 @@
                                     </a>
                                 </li> *@
                                 <li>
-                                    <a class="dropdown-item" asp-controller="Orders" asp-action="CustomerOrders" asp-route-custId="@Context.Session.GetInt32(" IdCustomer")">
+                                    <a class="dropdown-item" asp-controller="Orders" asp-action="CustomerOrders" asp-route-customerId="@Context.Session.GetInt32("IdCustomer")">
                                         <i class="bi bi-list-check me-2"></i>طلباتي
                                     </a>
                                 </li>
@@ -118,6 +118,7 @@
                     {
                         <div class="d-flex gap-2">
                             <a class="btn btn-outline-primary" asp-controller="CustomerClient" asp-action="Login">تسجيل الدخول</a>
+                            <a class="btn btn-outline-primary" asp-controller="Account" asp-action="Login">تسجيل الدخول مورد</a>
                             <a class="btn btn-primary" asp-controller="CustomerClient" asp-action="Register">إنشاء حساب</a>
                         </div>
                     }

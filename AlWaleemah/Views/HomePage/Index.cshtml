@@ -6,54 +6,358 @@
 }
 
 <!-- Header-->
-<header class="bg-dark py-5">
+<header class="bg-dark py-5 position-relative overflow-hidden">
     <div class="container px-4 px-lg-5 my-5">
-        <div class="text-center text-white">
-            <h1 class="display-4 fw-bolder">Shop in style</h1>
-            <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
+        <div class="text-center mb-5">
+            <h1 class="display-5 fw-bold text-white mb-3">Our Premium Collection</h1>
+            <p class="lead text-white-50 mb-4">Discover our handpicked selection of quality products</p>
         </div>
-    </div>
-</header>
-<!-- Section-->
-<section class="py-5">
-    <div class="container px-4 px-lg-5 mt-5">
-        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 
-
-
-
-
-
-            
-        @foreach (var product in Model)
-            {
-
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <!-- Product image-->
-                        <img class="card-img-top w-100" src="@product.ImageUrl" alt="..." style="height: 250px; object-fit: cover;" />
-                        <!-- Product details-->
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <!-- Product name-->
-                                <h5 class="fw-bolder">@product.ProductName</h5>
-                                <!-- Product price-->
-                                $@product.Price
+        <div class="featured-products-wrapper position-relative">
+            <div class="featured-products-scroll" id="featuredProducts">
+                @foreach (var p in Model)
+                {
+                    <div class="featured-product-item text-center">
+                        <div class="product-image-container position-relative mb-3">
+                            <img src="@p.ImageUrl" alt="@p.ProductName" class="featured-product-img" />
+                            <div class="product-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center">
+                                <a class="btn btn-outline-light btn-sm rounded-pill" asp-action="Details" asp-route-Id="@p.Id">Quick View</a>
                             </div>
                         </div>
-                        <!-- Product actions-->
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" asp-action="Details" asp-route-Id="@product.Id">View options</a></div>
+                        <h6 class="text-white mb-1">@p.ProductName</h6>
+                        <span class="text-warning fw-bold">$@p.Price</span>
+                    </div>
+                }
+            </div>
+
+            <!-- Navigation buttons -->
+            <button class="scroll-btn scroll-btn-left position-absolute top-50 start-0 translate-middle-y" id="scrollLeft">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="scroll-btn scroll-btn-right position-absolute top-50 end-0 translate-middle-y" id="scrollRight">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Decorative elements -->
+    <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="z-index: 0;">
+        <div class="position-absolute" style="top: 10%; left: 5%; width: 100px; height: 100px; background: rgba(255,255,255,0.03); border-radius: 50%;"></div>
+        <div class="position-absolute" style="bottom: 15%; right: 8%; width: 150px; height: 150px; background: rgba(255,255,255,0.02); border-radius: 50%;"></div>
+    </div>
+</header>
+
+<!-- Section-->
+<section class="py-5 bg-light">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <h2 class="fw-bold">All Products</h2>
+            <div class="d-flex gap-2">
+                <div class="dropdown">
+                    <button class="btn btn-outline-dark dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Sort by
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="sortDropdown">
+                        <li><a class="dropdown-item" href="#">Price: Low to High</a></li>
+                        <li><a class="dropdown-item" href="#">Price: High to Low</a></li>
+                        <li><a class="dropdown-item" href="#">Name A-Z</a></li>
+                    </ul>
+                </div>
+                <div class="btn-group" role="group">
+                    <input type="radio" class="btn-check" name="viewMode" id="gridView" autocomplete="off" checked>
+                    <label class="btn btn-outline-dark" for="gridView"><i class="fas fa-th"></i></label>
+
+                    <input type="radio" class="btn-check" name="viewMode" id="listView" autocomplete="off">
+                    <label class="btn btn-outline-dark" for="listView"><i class="fas fa-list"></i></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 g-lg-5 row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 justify-content-center" id="productsGrid">
+            @foreach (var product in Model)
+            {
+                <div class="col mb-4">
+                    <div class="card product-card h-100 shadow-sm border-0">
+                        <!-- Product image-->
+                        <div class="position-relative overflow-hidden">
+                            <img class="card-img-top w-100 product-image" src="@product.ImageUrl" alt="@product.ProductName" />
+                            <div class="card-img-overlay d-flex align-items-start justify-content-end p-3">
+                                <button class="btn btn-light btn-sm rounded-circle shadow-sm favorite-btn">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                            </div>
+                            <div class="product-actions position-absolute w-100 bottom-0 start-0 p-3 d-flex justify-content-center">
+                                <a class="btn btn-dark btn-sm rounded-pill px-3" asp-action="Details" asp-route-Id="@product.Id">View Details</a>
+                            </div>
+                        </div>
+                        <!-- Product details-->
+                        <div class="card-body p-4 d-flex flex-column">
+                            <div class="text-center mb-3 flex-grow-1">
+                                <!-- Product name-->
+                                <h5 class="fw-bold mb-2">@product.ProductName</h5>
+                                <!-- Product price-->
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <span class="h5 text-dark mb-0">$@product.Price</span>
+                                    @if (product.Price > 50)
+                                    {
+                                        <span class="badge bg-success ms-2">Popular</span>
+                                    }
+                                </div>
+                            </div>
+                            <div class="mt-auto text-center">
+                                <button class="btn btn-outline-dark btn-sm w-100 add-to-cart-btn">
+                                    <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-               
-                            
-
             }
+        </div>
+
+        <!-- Load more button -->
+        <div class="text-center mt-5">
+            <button class="btn btn-outline-dark px-4 py-2 rounded-pill">
+                <i class="fas fa-redo me-2"></i>Load More Products
+            </button>
         </div>
     </div>
 </section>
+
+<style>
+    /* Header section styles */
+    .featured-products-wrapper {
+        padding: 0 40px;
+    }
+
+    .featured-products-scroll {
+        display: flex;
+        gap: 20px;
+        overflow-x: auto;
+        padding: 20px 0;
+        scroll-behavior: smooth;
+        white-space: nowrap;
+        scrollbar-width: none; /* Firefox */
+    }
+
+        .featured-products-scroll::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Edge */
+        }
+
+    .featured-product-item {
+        min-width: 200px;
+        text-align: center;
+        background: rgba(255,255,255,0.08);
+        padding: 20px 15px;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .featured-product-item:hover {
+            background: rgba(255,255,255,0.12);
+            transform: translateY(-5px);
+        }
+
+    .featured-product-img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 8px;
+        transition: transform 0.3s ease;
+    }
+
+    .product-image-container:hover .featured-product-img {
+        transform: scale(1.05);
+    }
+
+    .product-overlay {
+        background: rgba(0,0,0,0.7);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        border-radius: 8px;
+    }
+
+    .product-image-container:hover .product-overlay {
+        opacity: 1;
+    }
+
+    .scroll-btn {
+        background: rgba(255,255,255,0.15);
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        z-index: 1;
+    }
+
+        .scroll-btn:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+    /* Product cards styles */
+    .product-card {
+        transition: all 0.3s ease;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+        }
+
+    .product-image {
+        height: 220px;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .product-card:hover .product-image {
+        transform: scale(1.05);
+    }
+
+    .favorite-btn, .add-to-cart-btn {
+        transition: all 0.3s ease;
+    }
+
+        .favorite-btn:hover {
+            background-color: #ff6b6b !important;
+            color: white !important;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: #212529;
+            color: white;
+        }
+
+    .product-actions {
+        opacity: 0;
+        transform: translateY(10px);
+        transition: all 0.3s ease;
+    }
+
+    .product-card:hover .product-actions {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Responsive adjustments */
+    @@media (max-width: 768px) {
+        .featured-products-wrapper {
+            padding: 0 15px;
+        }
+
+        .featured-product-item {
+            min-width: 160px;
+        }
+
+        .scroll-btn {
+            width: 35px;
+            height: 35px;
+        }
+
+        .d-flex.justify-content-between.align-items-center.mb-5 {
+            flex-direction: column;
+            gap: 15px;
+            text-align: center;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Featured products scroll functionality
+        const featuredProducts = document.getElementById('featuredProducts');
+        const scrollLeftBtn = document.getElementById('scrollLeft');
+        const scrollRightBtn = document.getElementById('scrollRight');
+
+        scrollLeftBtn.addEventListener('click', function() {
+            featuredProducts.scrollBy({
+                left: -250,
+                behavior: 'smooth'
+            });
+        });
+
+        scrollRightBtn.addEventListener('click', function() {
+            featuredProducts.scrollBy({
+                left: 250,
+                behavior: 'smooth'
+            });
+        });
+
+        // Favorite button functionality
+        const favoriteBtns = document.querySelectorAll('.favorite-btn');
+        favoriteBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                if (icon.classList.contains('far')) {
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                    this.style.backgroundColor = '#ff6b6b';
+                    this.style.color = 'white';
+                } else {
+                    icon.classList.remove('fas');
+                    icon.classList.add('far');
+                    this.style.backgroundColor = '';
+                    this.style.color = '';
+                }
+            });
+        });
+
+        // Add to cart button functionality
+        const addToCartBtns = document.querySelectorAll('.add-to-cart-btn');
+        addToCartBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-check me-2"></i>Added to Cart';
+                this.disabled = true;
+
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.disabled = false;
+                }, 2000);
+            });
+        });
+
+        // View mode toggle
+        const gridView = document.getElementById('gridView');
+        const listView = document.getElementById('listView');
+        const productsGrid = document.getElementById('productsGrid');
+
+        listView.addEventListener('change', function() {
+            if (this.checked) {
+                productsGrid.classList.remove('row-cols-1', 'row-cols-md-2', 'row-cols-lg-3', 'row-cols-xl-4');
+                productsGrid.classList.add('row-cols-1');
+
+                const productCards = document.querySelectorAll('.product-card');
+                productCards.forEach(card => {
+                    card.classList.add('d-flex', 'flex-row');
+                    card.querySelector('.card-img-top').classList.add('w-50');
+                });
+            }
+        });
+
+        gridView.addEventListener('change', function() {
+            if (this.checked) {
+                productsGrid.classList.remove('row-cols-1');
+                productsGrid.classList.add('row-cols-1', 'row-cols-md-2', 'row-cols-lg-3', 'row-cols-xl-4');
+
+                const productCards = document.querySelectorAll('.product-card');
+                productCards.forEach(card => {
+                    card.classList.remove('d-flex', 'flex-row');
+                    card.querySelector('.card-img-top').classList.remove('w-50');
+                });
+            }
+        });
+    });
+</script>
 
 
 @* 

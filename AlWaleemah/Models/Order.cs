@@ -14,7 +14,7 @@
 
         public OrderStatus Status { get; set; } = OrderStatus.Pending; // Pending, Paid, Cancelled, Expired
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime? PaidAt { get; set; }
+        public DateTime PaidAt { get; set; }
 
         public virtual ICollection<OrderItem> Items { get; set; } = new List<OrderItem>();
 

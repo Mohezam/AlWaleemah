@@ -29,7 +29,7 @@
                                 <i class="bi bi-receipt"></i>
                                 طلب رقم #@order.Id
                             </h5>
-                            <span class="badge bg-info">@order.CreatedAt.ToString("yyyy/MM/dd")</span>
+                            <span class="badge bg-info">@order.PaidAt.ToString("yyyy/MM/dd")</span>
                         </div>
                         
                         <div class="card-body">
@@ -55,12 +55,41 @@
                                     </tbody>
                                 </table>
                             </div>
-                            
+
                             <div class="d-flex justify-content-between mt-3 pt-3 border-top">
                                 <strong>المجموع:</strong>
                                 <strong class="text-success">
                                     @order.Items.Sum(i => i.Quantity * i.UnitPrice).ToString("C")
                                 </strong>
+                            </div>
+                        </div>
+
+                        <!-- أزرار التحكم - تم إضافتها هنا -->
+                        <div class="card-footer bg-white d-flex justify-content-between align-items-center">
+                            <div>
+                                <button class="btn btn-outline-danger btn-sm"
+                                        onclick="deleteOrder(@order.Id)"
+                                        title="حذف الطلب">
+                                    <i class="bi bi-trash"></i> حذف
+                                </button>
+
+                                <button class="btn btn-outline-secondary btn-sm ms-2"
+                                        onclick="exportToPdf(@order.Id)"
+                                        title="تصدير إلى PDF">
+                                    <i class="bi bi-file-pdf"></i> PDF
+                                </button>
+                            </div>
+
+                            <div class="d-flex align-items-center">
+                                <span class="text-muted me-2">الحالة:</span>
+                                <select class="form-select form-select-sm w-auto"
+                                        onchange="updateOrderStatus(@order.Id, this.value)"
+                                        style="min-width: 120px;">
+                                    <option value="Pending" selected="@(order.Status==OrderStatus.Pending )">معلق</option>
+                                    @* <option value="Processing" selected="@(order.Status == "Processing")">قيد التنفيذ</option> *@
+                                    <option value="Completed" selected="@(order.Status == OrderStatus.Paid)">مكتمل</option>
+                                    <option value="Cancelled" selected="@(order.Status == OrderStatus.Cancelled)">ملغي</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -70,7 +99,6 @@
     }
 </div>
 
-
 @section Styles {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <style>
@@ -78,12 +106,19 @@
             border: 1px solid #e3e3e3;
             border-radius: 10px;
         }
+
         .card-header {
             border-bottom: 2px solid #dee2e6;
         }
+
         .table th {
             border-top: none;
             font-weight: 600;
+        }
+
+        .card-footer {
+            border-top: 1px solid #e3e3e3;
+            background-color: #f8f9fa !important;
         }
     </style>
 }
@@ -92,22 +127,70 @@
     <script>
         // تحديث حالة الطلب
         function updateOrderStatus(orderId, status) {
+            if (!confirm('هل أنت متأكد من تغيير حالة الطلب؟')) return;
+
             fetch(`/Orders/UpdateStatus?orderId=${orderId}&status=${status}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
                 }
             })
             .then(response => {
                 if (response.ok) {
-                    location.reload();
+                    showAlert('تم تحديث حالة الطلب بنجاح', 'success');
+                } else {
+                    showAlert('حدث خطأ أثناء تحديث الحالة', 'error');
                 }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showAlert('حدث خطأ في الشبكة', 'error');
             });
         }
 
         // تصدير إلى PDF
         function exportToPdf(orderId) {
             window.open(`/Orders/ExportPdf?orderId=${orderId}`, '_blank');
+        }
+
+        // حذف الطلب
+        function deleteOrder(orderId) {
+            if (!confirm('هل أنت متأكد من حذف هذا الطلب؟ لا يمكن التراجع عن هذه العملية.')) return;
+
+            fetch(`/Orders/Delete?orderId=${orderId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    showAlert('تم حذف الطلب بنجاح', 'success');
+                    // إزالة البطاقة من الواجهة
+                    document.querySelector(`[data-order-id="${orderId}"]`).remove();
+                } else {
+                    showAlert('حدث خطأ أثناء حذف الطلب', 'error');
+                }
+            });
+        }
+
+        // عرض رسائل تنبيه
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show`;
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+
+            document.querySelector('.container').prepend(alertDiv);
+
+            // إزالة التنبيه تلقائياً بعد 5 ثواني
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
         }
     </script>
 }
